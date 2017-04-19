@@ -45,6 +45,7 @@ namespace ResponseExceptionHandler
                 {
                     context.Response.Clear();
                     context.Response.StatusCode = 500;
+                    context.Response.OnStarting(_clearCacheHeadersDelegate, context.Response);
                     context.Response.ContentType = new MediaTypeHeaderValue("application/json").ToString();
                     
                     ExceptionResponse exceptionResponse;
@@ -64,8 +65,6 @@ namespace ResponseExceptionHandler
 
                         _logger.LogError(new EventId(0, errorCode), ex, $"An unhandled exception has occurred [{errorCode}]: {ex.Message}");
                     }
-                    
-                    context.Response.OnStarting(_clearCacheHeadersDelegate, context.Response);
                     
                     return;
                 }
